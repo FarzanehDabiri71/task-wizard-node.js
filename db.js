@@ -36,4 +36,20 @@ export default class DB {
       return false;
     }
   }
+  static getTaskById(id) {
+    let data;
+    if (DB.DBExists()) {
+      data = fs.readFileSync(filename, "utf-8");
+    } else {
+      DB.createDB();
+      return false;
+    }
+    try {
+      data = JSON.parse(data);
+      const task = data.find((t) => t.id === Number(id));
+      return task ? task : false;
+    } catch (error) {
+      throw new Error("Syntax error .\n Please check DB file.");
+    }
+  }
 }
