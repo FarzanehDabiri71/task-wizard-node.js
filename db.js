@@ -68,4 +68,20 @@ export default class DB {
       throw new Error("Syntax error .\n Please check DB file.");
     }
   }
+
+  static getAllTasks() {
+    let data;
+    if (DB.DBExists()) {
+      data = fs.readFileSync(filename, "utf-8");
+    } else {
+      DB.createDB();
+      return [];
+    }
+    try {
+      data = JSON.parse(data);
+      return data;
+    } catch (error) {
+      throw new Error("Syntax error \n Please check the DB file.");
+    }
+  }
 }
