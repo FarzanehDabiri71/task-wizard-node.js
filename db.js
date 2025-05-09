@@ -20,20 +20,4 @@ export default class DB {
       throw new Error("Can not write in " + filename);
     }
   }
-  static resetDB() {
-    try {
-      fs.writeFileSync(filename, "[]", "utf-8");
-      console.log(success("DB file reset to empty."));
-      return true;
-    } catch (error) {
-      throw new Error("Can not write in " + filename);
-    }
-  }
-  static DBExists() {
-    if (fs.existsSync(filename)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 }
