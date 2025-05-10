@@ -184,4 +184,32 @@ export default class DB {
       throw new Error("Can not write to DB file.");
     }
   }
+
+  static deleteTask(id) {
+    id = Number(id);
+    if (id > 0 && id === parseInt(id)) {
+      let data;
+      try {
+        data = fs.readFileSync(filename, "utf-8");
+        data = JSON.parse(data);
+      } catch (error) {
+        throw new Error("Can not read DB file");
+      }
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === id) {
+          data.splice(i, 1);
+          data = JSON.stringify(data, null, "    ");
+          try {
+            fs.writeFileSync(filename, data, "utf-8");
+            return true;
+          } catch (error) {
+            throw new Error("Can not write in DB file");
+          }
+        }
+      }
+      return false;
+    } else {
+      throw new Error("Task id must be a positive integer");
+    }
+  }
 }
