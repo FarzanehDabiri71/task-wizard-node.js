@@ -70,4 +70,13 @@ export default class Task {
       return false;
     }
   }
+  static getAllTasks() {
+    const tasks = DB.getAllTasks();
+    const items = [];
+    for (let task of tasks) {
+      const item = new Task(task.title, task.completed);
+      item.#id = task.id;
+      items.push(item);
+    }
+  }
 }
