@@ -141,7 +141,8 @@ export default class DB {
       const str = JSON.stringify(data, null, "    ");
       try {
         fs.writeFileSync(filename, str, "utf-8");
-        return true;
+        // return true;
+        return id;
       } catch (error) {
         throw new Error("Can not save the task.");
       }
