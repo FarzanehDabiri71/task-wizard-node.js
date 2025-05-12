@@ -54,12 +54,20 @@ export default class Task {
     const task = DB.getTaskById(id);
     if (task) {
       const item = new Task(task.title, task.completed);
-      item.#id = id;
+      item.#id = task.id;
       return item;
     } else {
       return false;
     }
   }
-  static getTaskByTitle(title) {}
-  static getAllTasks() {}
+  static getTaskByTitle(title) {
+    const task = DB.getTaskByTitle(title);
+    if (task) {
+      const item = new Task(task.title, task.completed);
+      item.#id = task.id;
+      return item;
+    } else {
+      return false;
+    }
+  }
 }
