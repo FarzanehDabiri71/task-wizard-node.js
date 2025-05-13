@@ -37,7 +37,7 @@ export default class Task {
   [util.inspect.custom]() {
     return `Task {
     id:${chalk.bgYellowBright(this.id)}
-    title${chalk.green('"' + this.title + '"')}
+    title${chalk.greenBright('"' + this.title + '"')}
     completed:${chalk.blueBright(this.completed)}
     }`;
   }
@@ -70,13 +70,17 @@ export default class Task {
       return false;
     }
   }
-  static getAllTasks() {
+  static getAllTasks(rawObject = false) {
     const tasks = DB.getAllTasks();
+    if (rawObject) {
+      return tasks;
+    }
     const items = [];
     for (let task of tasks) {
       const item = new Task(task.title, task.completed);
       item.#id = task.id;
       items.push(item);
     }
+    return items;
   }
 }

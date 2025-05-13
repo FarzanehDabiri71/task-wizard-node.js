@@ -14,7 +14,7 @@ const success = chalk.greenBright.bold;
 
 export default class Action {
   static list() {
-    const tasks = DB.getAllTasks();
+    const tasks = Task.getAllTasks(true);
     if (tasks.length) {
       console.table(tasks);
     } else {
