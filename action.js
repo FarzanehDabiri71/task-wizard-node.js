@@ -50,4 +50,26 @@ export default class Action {
       console.log(error(error.message));
     }
   }
+  static async delete() {
+    const tasks = Task.getAllTasks();
+    const choices = [];
+    for (let task of tasks) {
+      choices.push(task.title);
+    }
+
+    const answer = await inquirer.prompt({
+      type: "list",
+      name: "title",
+      message: "Select a task to delete:",
+      choices,
+    });
+
+    const task = Task.getTaskByTitle(answer.title);
+    try {
+      DB.deleteTask(task.id);
+      console.log(success("Select task deleted successfully"));
+    } catch (err) {
+      console.log(error(err.message));
+    }
+  }
 }
