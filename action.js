@@ -158,4 +158,34 @@ export default class Action {
       console.log(error("Can not write to " + answer.filename));
     }
   }
+
+  static async import() {
+    const answer = await inquirer.prompt({
+      type: "input",
+      name: "filename",
+      message: "Enter input filename",
+    });
+    if (fs.existsSync(answer.filename)) {
+      try {
+        const input = fs.readFileSync(answer.filename);
+        const data = parse(input, {
+          columns: true,
+          cast: (value, context) => {
+            if (context.column === "id") {
+              return Number(value);
+            } else if (context.column === "completed") {
+              return value.toLocaleLowerCase() === "true" ? true : false;
+            }
+            return value;
+          },
+        });
+        DB.insertBulkData(data);
+        console.log(success("Data imported successfully."));
+      } catch (err) {
+        console.log(error(err.message));
+      }
+    } else {
+      console.log(error("Specified file does not exists."));
+    }
+  }
 }
