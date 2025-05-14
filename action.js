@@ -158,7 +158,6 @@ export default class Action {
       console.log(error("Can not write to " + answer.filename));
     }
   }
-
   static async import() {
     const answer = await inquirer.prompt({
       type: "input",
@@ -174,7 +173,7 @@ export default class Action {
             if (context.column === "id") {
               return Number(value);
             } else if (context.column === "completed") {
-              return value.toLocaleLowerCase() === "true" ? true : false;
+              return value.toLowerCase() === "true" ? true : false;
             }
             return value;
           },
@@ -186,6 +185,39 @@ export default class Action {
       }
     } else {
       console.log(error("Specified file does not exists."));
+    }
+  }
+
+  static async download() {
+    const baseURL = process.env.BASE_URL;
+    const answer = await inquirer.prompt({
+      type: "input",
+      name: "filename",
+      message: "Enter filename to download: ",
+    });
+
+    const config = {
+      baseURL,
+      url: answer.filename,
+    };
+    try {
+      const response = await axios(config);
+      const data = parse(response.data, {
+        columns: true,
+        cast: (value, context) => {
+          if (context.column === "id") {
+            return Number(value);
+          } else if (context.column === "completed") {
+            return value.toLowerCase() === "true" ? true : false;
+          }
+          return value;
+        },
+      });
+      DB.insertBulkData(data);
+      console.log(success("Data download to database successfully."));
+      console.table(data);
+    } catch (err) {
+      console.log(error(err.message));
     }
   }
 }
