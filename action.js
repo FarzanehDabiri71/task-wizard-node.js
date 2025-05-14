@@ -89,4 +89,44 @@ export default class Action {
       }
     }
   }
+  static async edit() {
+    const tasks = Task.getAllTasks();
+    const choices = [];
+    for (let task of tasks) {
+      choices.push(task.title);
+    }
+    const selectedTask = await inquirer.prompt({
+      type: "list",
+      name: "title",
+      message: "Select a task to edit:",
+      choices,
+    });
+    const task = Task.getTaskByTitle(selectedTask.title);
+
+    const answers = await inquirer.prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "Enter task title",
+        validate: (value) => {
+          if (value.length < 3) {
+            return "The title must contain at least 3 letters.";
+          }
+        },
+        default: task.title,
+      },
+      {
+        type: "confirm",
+        name: "completed",
+        message: "Is this task completed?",
+        default: false,
+      },
+    ]);
+    try {
+      DB.saveTask(answers.title, answers.completed, task.id);
+      console.log(success("Selected task edited successfully"));
+    } catch (err) {
+      console.log(error(err.message));
+    }
+  }
 }
