@@ -129,4 +129,33 @@ export default class Action {
       console.log(error(err.message));
     }
   }
+  static async export() {
+    const answer = await inquirer.prompt({
+      type: "input",
+      name: "filename",
+      message: "Enter output filename",
+      validate: (value) => {
+        if (!/^[\w .-]{1,50}$/.test(value)) {
+          return "Please enter a valid filename";
+        }
+        return true;
+      },
+    });
+
+    const tasks = Task.getAllTasks(true);
+    const output = stringify(tasks, {
+      header: true,
+      cast: {
+        boolean: (value, context) => {
+          return String(value);
+        },
+      },
+    });
+    try {
+      fs.writeFileSync(answer.filename, output);
+      console.log(success("Task exported successfully"));
+    } catch (error) {
+      console.log(error("Can not write to " + answer.filename));
+    }
+  }
 }
