@@ -1,5 +1,5 @@
 {
-  "name": "task-wizard",
+  "name": "task-wizard_web",
   "version": "1.0.0",
   "description": "A simple CLI-based task manager with magic-like simplicity",
   "main": "index.js",
@@ -11,13 +11,13 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "axios": "^1.9.0",
     "chalk": "^5.4.1",
     "csv": "^6.3.11",
     "dotenv": "^16.5.0",
-    "inquirer": "^12.6.0"
+    "express": "^4.18.2"
   },
   "devDependencies": {
+    "@types/express": "^5.0.2",
     "@types/node": "^22.15.17"
   }
 }
